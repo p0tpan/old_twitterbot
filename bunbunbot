@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+import twitter
+import time
+
+api = twitter.Api(consumer_key='R77mxgCTDD23WukPY1kWnFbmV',
+                  consumer_secret='3NesYZWtjUAI3tPpzsEzXP0nkr7Y60QGfDX3u1b4rDROumeQL2',
+                  access_token_key='983047356710113281-gJ6PeH426Dot0VyZ7MxtPgZK9rGJCjl',
+                  access_token_secret='aRtxCYbTNjwm6AsvjbeR3niL1VoSMSzyDZrxL54RytvST')
+#search for a tweet with "bun"
+results = api.GetSearch(
+    raw_query="q=bun")
+
+retweet=results[1]
+#select the first result
+
+searching = True
+
+#A loop to search for people mentioning bun and retweeting them if they are using english & omitting the username
+while searching:
+    if "bun" not in retweet.user.screen_name and retweet.lang == "en":
+        status = str(retweet.id)
+        api.PostRetweet(status_id=status, trim_user=True)
+        searching = False
+    else:
+        time.sleep(30)
+        results = api.GetSearch(
+            raw_query="q=bun")
+        retweet=results[1]
+        continue
